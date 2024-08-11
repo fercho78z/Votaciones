@@ -1,18 +1,28 @@
 package com.api.rest.exception.handler;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.api.rest.dto.ErrorDetails;
+import com.api.rest.dto.ValidationError;
 import com.api.rest.exception.ResourceNotFoundException;
 
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
+@RestController
 public class RestExceptionHandler {
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
@@ -26,4 +36,37 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(errorD,null,HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest){
+		ErrorDetails errorD= new ErrorDetails();
+		errorD.setTimeStamp(new Date().getTime());
+		errorD.setStatus(HttpStatus.BAD_REQUEST.value());
+		String requestPath=(String)httpServletRequest.getAttribute("javax.servlet.error.request_uri");
+		if( requestPath==null) {
+			requestPath=httpServletRequest.getRequestURI();
+		}
+		errorD.setTitle("Validacion fallida");
+		errorD.setDetail("La validacion de entrada fallo");
+		errorD.setDeveloperMessage(exception.getMessage());
+		
+		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+
+		for(FieldError fieldError:fieldErrors) {
+			List<ValidationError> validationErrorList = errorD.getErrors().get(fieldError.getField());
+		
+			if(validationErrorList==null) {
+				validationErrorList=new ArrayList<ValidationError>();
+				errorD.getErrors().put(fieldError.getField(),validationErrorList);
+			}
+			
+			ValidationError validationError= new ValidationError();
+			validationError.setCode(fieldError.getCode());
+			validationError.setMessage(fieldError.getDefaultMessage());
+			validationErrorList.add(validationError);
+			
+		}
+		
+		return new ResponseEntity<>(errorD,null,HttpStatus.BAD_REQUEST);
+	}
+	
 }

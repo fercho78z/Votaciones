@@ -1,8 +1,12 @@
 package com.api.rest.dto;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @AllArgsConstructor
@@ -14,6 +18,15 @@ public class ErrorDetails {
 	private String detail;
 	private long timeStamp;
 	private String developerMessage;
+	private Map<String, List<ValidationError>> errors = new HashMap<>(); 
+	
+	/*
+	public Map<String, List<ValidationError>> getErrors() {
+		return errors;
+	}
+	public void setErrors(Map<String, List<ValidationError>> errors) {
+		this.errors = errors;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -43,8 +56,20 @@ public class ErrorDetails {
 	}
 	public void setDeveloperMessage(String developerMessage) {
 		this.developerMessage = developerMessage;
+	}*/
+	/*public ErrorDetails(String title, int status, String detail, long timeStamp, String developerMessage,
+			Map<String, List<ValidationError>> errors) {
+		super();
+		this.title = title;
+		this.status = status;
+		this.detail = detail;
+		this.timeStamp = timeStamp;
+		this.developerMessage = developerMessage;
+		this.errors = errors;
 	}
 
+	public ErrorDetails() {
 	
+	}*/
 	
 }

@@ -5,6 +5,8 @@ import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,15 +27,17 @@ public class Encuesta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="ENCUESTA_ID")
 	private Long Id;
-	@Column(name="pregunta", nullable=false)
+	@Column(name="pregunta")
+	@NotEmpty
 	private String pregunta;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="ENCUESTA_ID")
 	@OrderBy
+	@Size(min = 2,max = 6)
 	private Set<Opcion> opciones;
 
-	public Long getId() {
+/*	public Long getId() {
 		return Id;
 	}
 
@@ -66,5 +70,5 @@ public class Encuesta {
 	public Encuesta() {
 		
 	}
-
+*/
 }

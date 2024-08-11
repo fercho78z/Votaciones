@@ -1,6 +1,8 @@
 package com.api.rest.controller;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 //import java.net.http.HttpHeaders;
 import java.util.Optional;
 
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.api.rest.dto.OpcionCount;
+import com.api.rest.dto.VotoResult;
 import com.api.rest.model.Encuesta;
 import com.api.rest.model.Voto;
 import com.api.rest.repository.VotoRepository;
@@ -45,8 +50,17 @@ public class VotoController {
 	}
 
 	@GetMapping("/encuestas/{encuestaId}/votos")
-	public Iterable<Voto> listarTodasLosVotos(@PathVariable Long encuestaId) {
-		return  votoR.findByEncuesta(encuestaId);
+	
+	public ResponseEntity<?> listarTodoslosVotos(@PathVariable Long encuestaId){
+	//public Iterable<Voto> listarTodasLosVotos(@PathVariable Long encuestaId) {
+	
+
+		Iterable<Voto> votos = votoR.findByEncuesta(encuestaId);
+
+		
+		return new ResponseEntity<>(votos,HttpStatus.OK);
+		
+		//return  votoR.findByEncuesta(encuestaId);
 	}
 	
 	

@@ -23,7 +23,7 @@ public class ComputeResultController {
 	private VotoRepository votoR;
 	
 	@GetMapping("/calcularResultado")
-	public ResponseEntity<?> calcularREsultadi(@RequestParam Long encuestaId){
+	public ResponseEntity<?> calcularResultado(@RequestParam Long encuestaId){
 		
 		VotoResult votoResult= new VotoResult();
 		Iterable<Voto> votos = votoR.findByEncuesta(encuestaId);

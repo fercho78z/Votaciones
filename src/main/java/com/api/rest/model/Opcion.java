@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Opcion {
 
 	@Id
@@ -32,7 +31,7 @@ public class Opcion {
 	
 	private String value;
 	
-	public Long getId() {
+/*		public Long getId() {
 		return Id;
 	}
 	public void setId(Long id) {
@@ -44,7 +43,7 @@ public class Opcion {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	public Opcion(Long id, String value) {
+		public Opcion(Long id, String value) {
 		super();
 		Id = id;
 		this.value = value;
@@ -54,7 +53,7 @@ public class Opcion {
 		super();
 
 	}
-
+*/
 
 
 

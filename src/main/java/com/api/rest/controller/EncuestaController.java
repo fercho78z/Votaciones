@@ -23,6 +23,7 @@ import com.api.rest.model.Encuesta;
 import com.api.rest.repository.EncuestaRepository;
 
 import jakarta.servlet.Servlet;
+import jakarta.validation.Valid;
 
 @RestController
 public class EncuestaController {
@@ -36,7 +37,7 @@ public class EncuestaController {
 
 //? devuelve cualquier tipo
 	@PostMapping("/encuestas")
-	public ResponseEntity<?> crearEncuesta(@RequestBody Encuesta encuesta) {
+	public ResponseEntity<?> crearEncuesta(@Valid @RequestBody Encuesta encuesta) {
 		encuesta = encuestaR.save(encuesta);
 		HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -50,7 +51,7 @@ public class EncuestaController {
 
 	@GetMapping("/encuestas/{encuestaId}")
 	public ResponseEntity<?> obtenerEncuesta(@PathVariable Long encuestaId){
-		verifyEncuesta(encuestaId);
+		//verifyEncuesta(encuestaId);
 	Optional<Encuesta> encuesta = encuestaR.findById(encuestaId);
 	if(encuesta.isPresent()) {
 		return new ResponseEntity<>(encuesta, HttpStatus.OK);
@@ -61,7 +62,7 @@ public class EncuestaController {
 	}
 	
 	@PutMapping("/encuestas/{encuestaId}")
-	public ResponseEntity<?> actualizarEncuesta(@RequestBody Encuesta encuesta, @PathVariable Long encuestaId) {
+	public ResponseEntity<?> actualizarEncuesta(@Valid @RequestBody Encuesta encuesta, @PathVariable Long encuestaId) {
 		verifyEncuesta(encuestaId);
 		
 		encuesta.setId(encuestaId);
@@ -77,8 +78,7 @@ public class EncuestaController {
 	public ResponseEntity<?>eliminarEncuesta(@PathVariable Long encuestaId) {
 		verifyEncuesta(encuestaId);
 		encuestaR.deleteById(encuestaId);
-		HttpHeaders httpHeaders = new HttpHeaders();
-
+		
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
