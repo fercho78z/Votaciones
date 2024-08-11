@@ -1,4 +1,4 @@
-package com.api.rest.controller;
+package com.api.rest.controller.v1;
 
 import java.net.URI;
 //import java.net.http.HttpHeaders;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,7 +26,8 @@ import com.api.rest.repository.EncuestaRepository;
 import jakarta.servlet.Servlet;
 import jakarta.validation.Valid;
 
-@RestController
+@RestController("EncuestaControllerV1")
+@RequestMapping("/v1")
 public class EncuestaController {
 	@Autowired
 	private EncuestaRepository encuestaR;
