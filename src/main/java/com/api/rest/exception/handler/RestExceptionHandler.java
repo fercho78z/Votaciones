@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -25,6 +27,9 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 public class RestExceptionHandler {
 	
+	@Autowired
+	private MessageSource messageSource;
+	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception, HttpServletRequest httpServletRequest){
 		ErrorDetails errorD= new ErrorDetails();
@@ -37,7 +42,8 @@ public class RestExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest){
+	//public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest){
+		public @ResponseBody ErrorDetails handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest httpServletRequest){
 		ErrorDetails errorD= new ErrorDetails();
 		errorD.setTimeStamp(new Date().getTime());
 		errorD.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -61,12 +67,13 @@ public class RestExceptionHandler {
 			
 			ValidationError validationError= new ValidationError();
 			validationError.setCode(fieldError.getCode());
-			validationError.setMessage(fieldError.getDefaultMessage());
+			//validationError.setMessage(fieldError.getDefaultMessage());
+			validationError.setMessage(messageSource.getMessage(fieldError, null));
 			validationErrorList.add(validationError);
 			
 		}
-		
-		return new ResponseEntity<>(errorD,null,HttpStatus.BAD_REQUEST);
+		return errorD;
+		//return new ResponseEntity<>(errorD,null,HttpStatus.BAD_REQUEST);
 	}
 	
 }
